@@ -1,5 +1,5 @@
 
-.indices-header {
+.FAANG-header {
   background-color: #F2F3F4;
   height: 150px; 
   display: flex;
@@ -8,7 +8,7 @@
 
 }
 
-.indices-header > div  {
+.FAANG-header > div  {
   width:100%;
   height: 100%;
   border-width:0px 1px 0px 1px;
@@ -165,31 +165,34 @@
   font-weight: bold;
 }
 
-.index-container {
+.FAANG-container {
   display: flex;
   flex-direction: column;
   justify-content:space-evenly;
 }
-.index-container > div {
+.FAANG-container > div {
   width:50%;
   margin:0 auto;
 }
-.index-title {
+.FAANG-title {
   font-size:25px;
   color:#797D7F;
   font-style: bold;
 
 }
-.index-price {
+.FAANG-price {
   font-size:20px;
   color: #333;
   font-style: bold;
 }
 
-.index-percentage {
+.FAANG-percentage {
   font-size: 20px;
   color: #008000; 
 }
+.green { color: #008000;}
+
+.red { color: #E74C3C  ;}
 
 
 
@@ -346,4 +349,8 @@
   font-weight: bold;
 }
 
+.changePercent {
+  margin-left: 5px;
+}
 
+/*GZSIUVJPSSSR5WU5*/

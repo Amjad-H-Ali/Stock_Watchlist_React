@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
+import FAANG_Header from './FAANG_Header';
+import Search from './Search';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      FAANG: []
+      FAANG: [],
+      stock:{}
     };
   }
   componentDidMount () {
@@ -15,12 +18,20 @@ class App extends Component {
     
   }
 
+  percentify = (num) => {
+
+    return (num*100).toFixed(2);
+
+  }
+
   getFAANG = async (ticker) => {
     const FAANGJSON = await fetch(`https://api.iextrading.com/1.0/stock/${ticker}/book`);
 
     const {quote:{symbol, latestPrice, change, changePercent}} = await FAANGJSON.json();
 
-    const stock = { symbol:symbol, latestPrice:latestPrice, change:change, changePercent:changePercent};
+    const percentified = this.percentify(changePercent);
+
+    const stock = {symbol, latestPrice, change, changePercent:percentified};
   
     const {state:{FAANG}} = this;
 
@@ -28,37 +39,28 @@ class App extends Component {
 
   }
 
+  getStock = async (e) => {
+    // console.log(e.target);
+    // if (e.which === 13 || e.target) {
+    //   console.log('Hello');
+    // }
+    // const stockJSON = await fetch(`https://api.iextrading.com/1.0/stock/${ticker}/book`);
+
+    // const {quote:{companyName, symbol, latestPrice, change, changePercent, marketCap}} = await stockJSON.json();
+
+    // const percentified = this.percentify(changePercent);
+
+    // this.setState({stock:{companyName, symbol, latestPrice, change, changePercent:percentified, marketCap}})
+    // console.log(this.state);
+  }
+
 
   render() {
+    console.log(this.state.FAANG);
     return (
       <div className="App">
-        <header className="indices-header">
-          <div className="index-container">
-            <div className="index-title">{this.state.FAANG.length > 0 ? this.state.FAANG[0].symbol : 'null' }</div>
-            <div className="index-price">{this.state.FAANG.length > 0 ? this.state.FAANG[0].latestPrice : 'null' }</div>
-            <div className="index-percentage">{this.state.FAANG.length > 0 ? this.state.FAANG[0].change : 'null' }</div>
-          </div>
-          <div className="index-container">
-            <div className="index-title">Dow 30</div>
-            <div className="index-price">24,782.80</div>
-            <div className="index-percentage">26.64(0.11%)</div>
-          </div>
-          <div className="index-container">
-            <div className="index-title">Dow 30</div>
-            <div className="index-price">24,782.80</div>
-            <div className="index-percentage">26.64(0.11%)</div>
-          </div>
-          <div className="index-container">
-            <div className="index-title">Dow 30</div>
-            <div className="index-price">24,782.80</div>
-            <div className="index-percentage">26.64(0.11%)</div>
-          </div>
-          <div className="index-container">
-            <div className="index-title">Dow 30</div>
-            <div className="index-price">24,782.80</div>
-            <div className="index-percentage">26.64(0.11%)</div>
-          </div>
-        </header>
+        
+       <FAANG_Header FAANG={this.state.FAANG}/>  
 
         <header className="app-header">
           <div className="watchlist-link nav">Watchlist</div>
@@ -66,9 +68,9 @@ class App extends Component {
           <div className="sign-link nav">Sign In</div>
         </header>
 
-        <div className="body-header">
-          Welcome John
-        </div>
+        <Search getStock={this.getStock}/>
+
+        
 
       </div>
     );
@@ -77,7 +79,13 @@ class App extends Component {
 
 export default App;
 
-/*
+/*<div className="body-header">
+   Welcome John
+  </div>
+
+
+
+
         <div id="myModal" class="modal">
 
           <div class="modal-content">
