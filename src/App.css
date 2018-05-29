@@ -246,13 +246,13 @@
 
 .close:hover,
 .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .modal-header {
-    padding: 2px 16px;
+  padding: 2px 16px;
 }
 
 .modal-body {
@@ -336,4 +336,13 @@
   background-color:#F2F3F4;
 }
 
+.body-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size:20px;
+  height: 100px;
+  color:#797D7F;
+  font-weight: bold;
+}
 
