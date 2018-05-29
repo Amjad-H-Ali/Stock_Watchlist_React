@@ -2,14 +2,41 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      FAANG: []
+    };
+  }
+  componentDidMount () {
+    const tickersFAANG = ['FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG'];
+
+    tickersFAANG.forEach(ticker => this.getFAANG(ticker));
+    
+  }
+
+  getFAANG = async (ticker) => {
+    const FAANGJSON = await fetch(`https://api.iextrading.com/1.0/stock/${ticker}/book`);
+
+    const {quote:{symbol, latestPrice, change, changePercent}} = await FAANGJSON.json();
+
+    const stock = { symbol:symbol, latestPrice:latestPrice, change:change, changePercent:changePercent};
+  
+    const {state:{FAANG}} = this;
+
+    this.setState({FAANG:[...FAANG, stock]});
+
+  }
+
+
   render() {
     return (
       <div className="App">
         <header className="indices-header">
           <div className="index-container">
-            <div className="index-title">Dow 30</div>
-            <div className="index-price">24,782.80</div>
-            <div className="index-percentage">26.64(0.11%)</div>
+            <div className="index-title">{this.state.FAANG.length > 0 ? this.state.FAANG[0].symbol : 'null' }</div>
+            <div className="index-price">{this.state.FAANG.length > 0 ? this.state.FAANG[0].latestPrice : 'null' }</div>
+            <div className="index-percentage">{this.state.FAANG.length > 0 ? this.state.FAANG[0].change : 'null' }</div>
           </div>
           <div className="index-container">
             <div className="index-title">Dow 30</div>
