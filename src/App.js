@@ -6,11 +6,31 @@ class App extends Component {
     return (
       <div className="App">
         <header className="indices-header">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
+          <div className="index-container">
+            <div className="index-title">Dow 30</div>
+            <div className="index-price">24,782.80</div>
+            <div className="index-percentage">26.64(0.11%)</div>
+          </div>
+          <div className="index-container">
+            <div className="index-title">Dow 30</div>
+            <div className="index-price">24,782.80</div>
+            <div className="index-percentage">26.64(0.11%)</div>
+          </div>
+          <div className="index-container">
+            <div className="index-title">Dow 30</div>
+            <div className="index-price">24,782.80</div>
+            <div className="index-percentage">26.64(0.11%)</div>
+          </div>
+          <div className="index-container">
+            <div className="index-title">Dow 30</div>
+            <div className="index-price">24,782.80</div>
+            <div className="index-percentage">26.64(0.11%)</div>
+          </div>
+          <div className="index-container">
+            <div className="index-title">Dow 30</div>
+            <div className="index-price">24,782.80</div>
+            <div className="index-percentage">26.64(0.11%)</div>
+          </div>
         </header>
 
         <header className="app-header">
@@ -25,7 +45,7 @@ class App extends Component {
         </div>
 
         <div className="app-body">
-          <div className="watchlist-btn-container"><button className="add-to-watchlist-btn"></button></div>
+          <div className="watchlist-btn-container"><button className="add-to-watchlist-btn">Watch<i className="fa fa-angle-right"></i></button></div>
 
           <div className="stock-info">
             <div><span className="stock-title">Apple Inc.</span> <span className="stock-ticker">(APPL)</span></div>
@@ -34,7 +54,13 @@ class App extends Component {
           </div>
 
           <div></div>
-        </div>  
+        </div> 
+
+
+
+
+
+
        
       </div>
     );
@@ -42,3 +68,21 @@ class App extends Component {
 }
 
 export default App;
+        <div id="myModal" class="modal">
+
+          <div class="modal-content">
+            <div class="modal-header">
+              <span class="close">&times;</span>
+              <h2 className="modal-title">Sign In</h2>
+            </div>
+
+            <div class="modal-body">
+              <form className="sign-form">
+                <div className="tabs"> <div className="sign-tab">Sign In</div> <div className="register-tab"> Register</div> </div>
+                <div className="email-input-div"><div className="label">Email</div><input className="email-input" type="text" placeholder="Enter Your Email"/></div>
+                <div className="password-input-div"><div className="label">Password</div><input className="password-input" type="text" placeholder="Enter Your Password"/></div>
+                <div className="submit-btn-input-div"><button className="submit-btn">Sign In</button></div>
+              </form>  
+            </div>
+          </div>
+        </div> 
