@@ -4,6 +4,7 @@ import FAANG_Header from './FAANG_Header';
 import Search from './Search';
 import Stock from './Stock';
 import Signin_Register from './Signin_Register'
+import Watchlist from './Watchlist';
 
 class App extends Component {
   constructor() {
@@ -14,16 +15,17 @@ class App extends Component {
       stock: {},
       modal: false,
       logged: false,
-      message: ""
+      message: "",
+      watchedStocks: []
 
 
       
     };
   }
   componentDidMount () {
-    const tickersFAANG = ['FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG'];
+    this.getWatchedStocks();
+    this.getFAANG('FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG');
 
-    tickersFAANG.forEach(ticker => this.getFAANG(ticker));
     
   }
 
@@ -33,29 +35,37 @@ class App extends Component {
 
   }
 
-  getFAANG = async (ticker) => {
-    const FAANGJSON = await fetch(`https://api.iextrading.com/1.0/stock/${ticker}/book`);
-
-    const {quote:{companyName, symbol, latestPrice, change, changePercent, marketCap}} = await FAANGJSON.json();
-
-    const percentified = this.percentify(changePercent);
-
-    const stock = {companyName, symbol, latestPrice, change, changePercent:percentified, marketCap};
+  getFAANG = async (...ticker) => {
+    
+    const FAANGJSON = await fetch(`https://api.iextrading.com/1.0/stock/market/batch?symbols=${ticker}&types=quote`)
   
-    const {state:{FAANG}} = this;
+    const ObjFAANG = await FAANGJSON.json();
 
-    if (stock.symbol === 'AAPL') {
-      this.setState({AAPL:stock})
+    for (let key in ObjFAANG) { 
+
+      const {state:{FAANG}} = this; 
+
+      const {quote:{companyName, symbol, latestPrice, change, changePercent, marketCap}} = ObjFAANG[key];
+
+      const percentified = this.percentify(changePercent);
+
+      const stock = {companyName, symbol, latestPrice, change, changePercent:percentified, marketCap};
+
+      if (key === 'AAPL') {
+        this.setState({AAPL:stock})
+      }
+
+      this.setState({FAANG:[...FAANG, stock]});
     }
-
-    this.setState({FAANG:[...FAANG, stock]});
-
+    
+    
   }
 
 
 
 
   getStock = async (ticker) => {
+    
     
     const stockJSON = await fetch(`https://api.iextrading.com/1.0/stock/${ticker}/book`);
 
@@ -64,8 +74,6 @@ class App extends Component {
     const percentified = this.percentify(changePercent);
 
     this.setState({stock:{companyName, symbol, latestPrice, change, changePercent:percentified, marketCap}, showStock:true });
-
-  
    
   }
 
@@ -102,12 +110,46 @@ class App extends Component {
 
   }
 
+  // getWatchedStocks = async () => {
+  //   const stocksJSON = await fetch('https://localhost:9292/stocks', {
+  //     credentials: include
+  //   });
+  //   const {stocks} = await stocksJSON.json();
+
+  //   this.getWatchedStocksInfo(stocks);
+    
+  // }
+
+  // getWatchedStocksInfo = async (ticker) => {
+  //   const stockInfoJSON = await fetch(`https://api.iextrading.com/1.0/stock/market/batch?symbols=${ticker}&types=quote`);
+
+  //   const objOfStocks = await stockInfoJSON.json();
+
+  //   console.log(objOfStocks);
+
+  //   for(let key in objOfStocks) {
+
+  //     const{watchedStocks} = this.state;
+
+  //     const {quote:{symbol, companyName, latestPrice, iexBidPrice:bid, iexAskPrice:ask, change, changePercent, high, low, iexVolume:volume, latestTime}} = objOfStocks[key];
+
+  //     const percentified = this.percentify(changePercent);
+
+  //     const stock = {symbol, companyName, latestPrice, iexBidPrice:bid, iexAskPrice:ask, change, changePercent:percentified, high, low, iexVolume:volume, latestTime}
+
+  //     this.setState({watchedStocks:[...watchedStocks, stock]});
+
+  //   }
+
+
+  // }
+
 
   render() {
     return (
       <div className="App">
         
-       <FAANG_Header FAANG={this.state.FAANG}/>  
+        <FAANG_Header FAANG={this.state.FAANG}/>  
 
         <header className="app-header">
           <div className="watchlist-link nav">Watchlist</div>
@@ -115,65 +157,12 @@ class App extends Component {
           <div onClick={this.showModal} className="sign-link nav">Sign In</div>
         </header>
 
+        <Watchlist watchedStocks={this.state.watchedStocks} />
 
-        <div className='watchlist'>
-          <div className='watchlist-title'> Watchlist </div>
 
-          <div className='watchlist-rows'>
-            <div className='watchlist-main-row row'>
-              <div className='bold'>Symbol</div>
-              <div>Name</div>
-              <div>Price</div>
-              <div>Bid</div>
-              <div>Ask</div>
-              <div>Change</div>
-              <div>High</div>
-              <div>Low</div>
-              <div>Volume</div>
-              <div>Updated</div>
-              <div></div>
-            </div>
-            <div className='watchlist-row row'>
-              <div className='bold'>AAPL</div>
-              <div>Apple Inc</div>
-              <div>187.45</div>
-              <div>187.45</div>
-              <div>187.45</div>
-              <div>27.30</div>
-              <div>187.45</div>
-              <div>187.34</div>
-              <div>1234458838</div>
-              <div>1:32:34 EST</div>
-              <div className='x'><i className='fa fa-close'></i></div>
-            </div>
-            <div className='watchlist-row row'>
-              <div className='bold'>AAPL</div>
-              <div>Apple Inc</div>
-              <div>187.45</div>
-              <div>187.45</div>
-              <div>187.45</div>
-              <div>27.30</div>
-              <div>187.45</div>
-              <div>187.34</div>
-              <div>1234458838</div>
-              <div>1:32:34 EST</div>
-              <div className='x'>X</div>
-            </div>
-            <div className='watchlist-row row'>
-              <div className='bold'>AAPL</div>
-              <div>Apple Inc</div>
-              <div>187.45</div>
-              <div>187.45</div>
-              <div>187.45</div>
-              <div >27.30</div>
-              <div>187.45</div>
-              <div>187.34</div>
-              <div>1234458838</div>
-              <div>1:32:34 EST</div>
-              <div className='x'>X</div>
-            </div>
-          </div>
-        </div>  
+      <Search getStock={this.getStock} />
+
+        <Stock stock={this.state.stock} AAPL={this.state.AAPL} />
         
         
           
@@ -187,9 +176,7 @@ class App extends Component {
 
 export default App;
 /*
-<Search getStock={this.getStock} />
 
-        <Stock stock={this.state.stock} AAPL={this.state.AAPL}/>
         */
 
 

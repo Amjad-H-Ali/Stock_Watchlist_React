@@ -2,7 +2,7 @@ import React from 'react';
 
 
 const Stock = ({stock, AAPL}) => {
-	
+
 	let companyName, symbol, latestPrice, change, changePercent, marketCap;
 
 	if (Object.keys(stock).length === 0) {
