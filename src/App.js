@@ -16,14 +16,14 @@ class App extends Component {
       modal: false,
       logged: false,
       message: "",
-      watchedStocks: []
+      watchedStocks: [],
+      watchlistShowing:false
 
 
       
     };
   }
   componentDidMount () {
-    this.getWatchedStocks();
     this.getFAANG('FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG');
 
     
@@ -85,7 +85,8 @@ class App extends Component {
   }
 
   signIn = async (email, password) => {
-    const signInJSON = await fetch('https://localhost:9292/user/login', {
+
+    const signInJSON = await fetch('http://localhost:9292/user/login', {
       method:'POST',
       credentials: 'include',
       body: JSON.stringify({email: email, password: password})
@@ -93,12 +94,14 @@ class App extends Component {
 
     const { success, message } = await signInJSON.json();
 
-    success ? this.setState({logged: true}) : this.setState({message: message});
+    
+
+    success ? this.setState({logged: true, modal:false}) : this.setState({message: message});
 
   }
 
   signUp = async (email, password) => {
-    const signUpJSON = await fetch('https://localhost:9292/user/register', {
+    const signUpJSON = await fetch('http://localhost:9292/user/register', {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify({email: email, password: password})
@@ -106,70 +109,80 @@ class App extends Component {
 
     const { success, message } = await signUpJSON.json();
 
-    success ? this.setState({logged: true}) : this.setState({message: message});
+    success ? this.setState({logged: true, modal: false}) : this.setState({message: message});
 
   }
 
-  // getWatchedStocks = async () => {
-  //   const stocksJSON = await fetch('https://localhost:9292/stocks', {
-  //     credentials: include
-  //   });
-  //   const {stocks} = await stocksJSON.json();
+  getWatchedStocks = async () => {
 
-  //   this.getWatchedStocksInfo(stocks);
+    const {state:{logged}} = this;
+  
+    if (logged) {
+      const stocksJSON = await fetch('http://localhost:9292/stock', {
+        credentials: 'include'
+      });
+      
+      const {stocks} = await stocksJSON.json();
+
     
-  // }
 
-  // getWatchedStocksInfo = async (ticker) => {
-  //   const stockInfoJSON = await fetch(`https://api.iextrading.com/1.0/stock/market/batch?symbols=${ticker}&types=quote`);
+      this.getWatchedStocksInfo(stocks);
+    }
+    else {
+      this.setState({modal: true, message:'You Must Be Logged In First!'});
+    }
+    
+  }
 
-  //   const objOfStocks = await stockInfoJSON.json();
+  getWatchedStocksInfo = async (ticker) => {
+    const stockInfoJSON = await fetch(`https://api.iextrading.com/1.0/stock/market/batch?symbols=${ticker}&types=quote`);
 
-  //   console.log(objOfStocks);
+    const objOfStocks = await stockInfoJSON.json();
 
-  //   for(let key in objOfStocks) {
+   
 
-  //     const{watchedStocks} = this.state;
+    for(let key in objOfStocks) {
 
-  //     const {quote:{symbol, companyName, latestPrice, iexBidPrice:bid, iexAskPrice:ask, change, changePercent, high, low, iexVolume:volume, latestTime}} = objOfStocks[key];
+      const{watchedStocks, watchlistShowing} = this.state;
 
-  //     const percentified = this.percentify(changePercent);
+      const {quote:{symbol, companyName, latestPrice, iexBidPrice, iexAskPrice, change, changePercent, high, low, iexVolume, latestTime}} = objOfStocks[key];
 
-  //     const stock = {symbol, companyName, latestPrice, iexBidPrice:bid, iexAskPrice:ask, change, changePercent:percentified, high, low, iexVolume:volume, latestTime}
+      const percentified = this.percentify(changePercent);
 
-  //     this.setState({watchedStocks:[...watchedStocks, stock]});
+      const stock = {symbol, companyName, latestPrice, iexBidPrice, iexAskPrice, change, changePercent:percentified, high, low, iexVolume, latestTime}
 
-  //   }
+      this.setState({watchedStocks:[...watchedStocks, stock], watchlistShowing: true });
 
+    }
 
-  // }
+  }
 
 
   render() {
+    
     return (
       <div className="App">
         
-        <FAANG_Header FAANG={this.state.FAANG}/>  
+      <FAANG_Header FAANG={this.state.FAANG}/>  
 
-        <header className="app-header">
-          <div className="watchlist-link nav">Watchlist</div>
-          <div className="app-title">Foo Finance</div>
-          <div onClick={this.showModal} className="sign-link nav">Sign In</div>
-        </header>
+      <header className="app-header">
+        <div onClick={this.getWatchedStocks} className="watchlist-link nav">Watchlist</div>
+        <div className="app-title">Foo Finance</div>
+        <div onClick={this.showModal} className="sign-link nav">Sign In</div>
+      </header>
 
-        <Watchlist watchedStocks={this.state.watchedStocks} />
+      {this.state.watchlistShowing ? <Watchlist watchedStocks={this.state.watchedStocks} /> : 
+      <div> <Search getStock={this.getStock} /> <Stock stock={this.state.stock} AAPL={this.state.AAPL}/> </div>}
 
 
-      <Search getStock={this.getStock} />
-
-        <Stock stock={this.state.stock} AAPL={this.state.AAPL} />
+      
         
         
           
 
-        {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp} /> : null}
+      {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp} /> : null}
 
-      </div>
+    </div>
     );
   }
 }

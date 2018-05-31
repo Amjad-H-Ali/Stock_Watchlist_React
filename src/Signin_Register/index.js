@@ -25,16 +25,20 @@ class Signin_Register extends Component{
 	}
 
 	handleSubmit = (e) => {
+
 		e.preventDefault();
 
 		const {state:{registering, emailInput, pswInput}, props:{signUp, signIn}} = this;
 		
+
 		if (registering) {
-			signUp.bind(null, emailInput, pswInput);
+			signUp(emailInput, pswInput);
 		}
 		else {
-			signIn.bind(null, emailInput, pswInput);
+			console.log(emailInput);
+			signIn(emailInput, pswInput);
 		}
+
 	}
 
 	

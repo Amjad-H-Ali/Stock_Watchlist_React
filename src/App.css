@@ -376,7 +376,7 @@
 }
 .row {
   color: #333;
-  height: 50px;
+  height: 80px;
   display: flex;
   justify-content: space-evenly;
   flex-direction: row;
