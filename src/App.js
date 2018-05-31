@@ -8,7 +8,8 @@ class App extends Component {
     super();
     this.state = {
       FAANG: [],
-      stock:{}
+      stock:{},
+      showStock:false
     };
   }
   componentDidMount () {
@@ -39,24 +40,26 @@ class App extends Component {
 
   }
 
-  getStock = async (e) => {
-    // console.log(e.target);
-    // if (e.which === 13 || e.target) {
-    //   console.log('Hello');
-    // }
-    // const stockJSON = await fetch(`https://api.iextrading.com/1.0/stock/${ticker}/book`);
 
-    // const {quote:{companyName, symbol, latestPrice, change, changePercent, marketCap}} = await stockJSON.json();
 
-    // const percentified = this.percentify(changePercent);
 
-    // this.setState({stock:{companyName, symbol, latestPrice, change, changePercent:percentified, marketCap}})
-    // console.log(this.state);
+  getStock = async (ticker) => {
+    console.log(ticker);
+    
+    const stockJSON = await fetch(`https://api.iextrading.com/1.0/stock/${ticker}/book`);
+
+    const {quote:{companyName, symbol, latestPrice, change, changePercent, marketCap}} = await stockJSON.json();
+
+    const percentified = this.percentify(changePercent);
+
+    this.setState({stock:{companyName, symbol, latestPrice, change, changePercent:percentified, marketCap}, showStock:true });
+
+    console.log(this.state);
+   
   }
 
 
   render() {
-    console.log(this.state.FAANG);
     return (
       <div className="App">
         
