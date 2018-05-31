@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import './App.css';
 import FAANG_Header from './FAANG_Header';
 import Search from './Search';
+import Stock from './Stock';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       FAANG: [],
+      AAPL:{},
       stock:{},
-      showStock:false
+      
     };
   }
   componentDidMount () {
@@ -28,13 +30,17 @@ class App extends Component {
   getFAANG = async (ticker) => {
     const FAANGJSON = await fetch(`https://api.iextrading.com/1.0/stock/${ticker}/book`);
 
-    const {quote:{symbol, latestPrice, change, changePercent}} = await FAANGJSON.json();
+    const {quote:{companyName, symbol, latestPrice, change, changePercent, marketCap}} = await FAANGJSON.json();
 
     const percentified = this.percentify(changePercent);
 
-    const stock = {symbol, latestPrice, change, changePercent:percentified};
+    const stock = {companyName, symbol, latestPrice, change, changePercent:percentified, marketCap};
   
     const {state:{FAANG}} = this;
+
+    if (stock.symbol === 'AAPL') {
+      this.setState({AAPL:stock})
+    }
 
     this.setState({FAANG:[...FAANG, stock]});
 
@@ -44,7 +50,6 @@ class App extends Component {
 
 
   getStock = async (ticker) => {
-    console.log(ticker);
     
     const stockJSON = await fetch(`https://api.iextrading.com/1.0/stock/${ticker}/book`);
 
@@ -54,7 +59,7 @@ class App extends Component {
 
     this.setState({stock:{companyName, symbol, latestPrice, change, changePercent:percentified, marketCap}, showStock:true });
 
-    console.log(this.state);
+  
    
   }
 
@@ -71,7 +76,9 @@ class App extends Component {
           <div className="sign-link nav">Sign In</div>
         </header>
 
-        <Search getStock={this.getStock}/>
+        <Search getStock={this.getStock} />
+
+        <Stock stock={this.state.stock} AAPL={this.state.AAPL}/>
 
         
 

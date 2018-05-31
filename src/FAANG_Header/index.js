@@ -13,7 +13,7 @@ const FAANG_Header = ({ FAANG }) => {
 			<div className="FAANG-container" key={i}>
 	            <div className="FAANG-title">{symbol}</div>
 	            <div className="FAANG-price">{latestPrice}</div>
-	        	<div className={change > 0 ? 'green FAANG-percentage' : 'red FAANG-percentage'}> {change}<span className="changePercent">({changePercent}%)</span> </div>
+	        	<div className={change < 0 ? 'red FAANG-percentage' : 'green FAANG-percentage'}> {change}<span className="changePercent">({changePercent}%)</span> </div>
 	        </div>
 	    )    
 
