@@ -3,14 +3,20 @@ import './App.css';
 import FAANG_Header from './FAANG_Header';
 import Search from './Search';
 import Stock from './Stock';
+import Signin_Register from './Signin_Register'
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       FAANG: [],
-      AAPL:{},
-      stock:{},
+      AAPL: {},
+      stock: {},
+      modal: false,
+      logged: false,
+      message: ""
+
+
       
     };
   }
@@ -63,6 +69,39 @@ class App extends Component {
    
   }
 
+  showModal = (e) => {
+    const {state:{modal}} = this;
+
+    modal ? this.setState({modal:false}) : this.setState({modal:true})
+
+  }
+
+  signIn = async (email, password) => {
+    const signInJSON = await fetch('https://localhost:9292/user/login', {
+      method:'POST',
+      credentials: 'include',
+      body: JSON.stringify({email: email, password: password})
+    });
+
+    const { success, message } = await signInJSON.json();
+
+    success ? this.setState({logged: true}) : this.setState({message: message});
+
+  }
+
+  signUp = async (email, password) => {
+    const signUpJSON = await fetch('https://localhost:9292/user/register', {
+      method: 'POST',
+      credentials: 'include',
+      body: JSON.stringify({email: email, password: password})
+    });
+
+    const { success, message } = await signUpJSON.json();
+
+    success ? this.setState({logged: true}) : this.setState({message: message});
+
+  }
+
 
   render() {
     return (
@@ -73,14 +112,14 @@ class App extends Component {
         <header className="app-header">
           <div className="watchlist-link nav">Watchlist</div>
           <div className="app-title">Foo Finance</div>
-          <div className="sign-link nav">Sign In</div>
+          <div onClick={this.showModal} className="sign-link nav">Sign In</div>
         </header>
 
         <Search getStock={this.getStock} />
 
         <Stock stock={this.state.stock} AAPL={this.state.AAPL}/>
 
-        
+        {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp}/> : null}
 
       </div>
     );

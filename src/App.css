@@ -50,6 +50,13 @@
 .nav {
   font-size: 20px;
 }
+
+.nav:hover {
+  cursor: pointer;
+  color: #86CBF9;
+  transition: .5s;
+}
+
 .search-field {
   height: 150px;
   display: flex;
@@ -336,7 +343,8 @@
 }
 
 .sign-tab:hover, .register-tab:hover {
-  background-color:#F2F3F4;
+  color:#86CBF9;
+  transition: .5s;
 }
 
 .body-header {
