@@ -115,11 +115,70 @@ class App extends Component {
           <div onClick={this.showModal} className="sign-link nav">Sign In</div>
         </header>
 
-        <Search getStock={this.getStock} />
 
-        <Stock stock={this.state.stock} AAPL={this.state.AAPL}/>
+        <div className='watchlist'>
+          <div className='watchlist-title'> Watchlist </div>
 
-        {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp}/> : null}
+          <div className='watchlist-rows'>
+            <div className='watchlist-main-row row'>
+              <div className='bold'>Symbol</div>
+              <div>Name</div>
+              <div>Price</div>
+              <div>Bid</div>
+              <div>Ask</div>
+              <div>Change</div>
+              <div>High</div>
+              <div>Low</div>
+              <div>Volume</div>
+              <div>Updated</div>
+              <div></div>
+            </div>
+            <div className='watchlist-row row'>
+              <div className='bold'>AAPL</div>
+              <div>Apple Inc</div>
+              <div>187.45</div>
+              <div>187.45</div>
+              <div>187.45</div>
+              <div>27.30</div>
+              <div>187.45</div>
+              <div>187.34</div>
+              <div>1234458838</div>
+              <div>1:32:34 EST</div>
+              <div className='x'><i className='fa fa-close'></i></div>
+            </div>
+            <div className='watchlist-row row'>
+              <div className='bold'>AAPL</div>
+              <div>Apple Inc</div>
+              <div>187.45</div>
+              <div>187.45</div>
+              <div>187.45</div>
+              <div>27.30</div>
+              <div>187.45</div>
+              <div>187.34</div>
+              <div>1234458838</div>
+              <div>1:32:34 EST</div>
+              <div className='x'>X</div>
+            </div>
+            <div className='watchlist-row row'>
+              <div className='bold'>AAPL</div>
+              <div>Apple Inc</div>
+              <div>187.45</div>
+              <div>187.45</div>
+              <div>187.45</div>
+              <div >27.30</div>
+              <div>187.45</div>
+              <div>187.34</div>
+              <div>1234458838</div>
+              <div>1:32:34 EST</div>
+              <div className='x'>X</div>
+            </div>
+          </div>
+        </div>  
+        
+        
+          
+
+        {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp} /> : null}
 
       </div>
     );
@@ -127,6 +186,14 @@ class App extends Component {
 }
 
 export default App;
+/*
+<Search getStock={this.getStock} />
+
+        <Stock stock={this.state.stock} AAPL={this.state.AAPL}/>
+        */
+
+
+
 
 /*<div className="body-header">
    Welcome John

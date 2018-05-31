@@ -360,5 +360,50 @@
 .changePercent {
   margin-left: 5px;
 }
+.watchlist-title {
+  display: flex;
+  color: #797D7F;
+  font-size: 50px;
+  font-weight: bold;
+  height: 150px;
+  align-items: center;
+  padding-left: 50px;
+}
+.watchlist-main-row {
+  background-color: #86CBF9;
+  font-size: 25px;
+  font-weight: bold; 
+}
+.row {
+  color: #333;
+  height: 50px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  align-items: center;
+}
+.row > div {
+  width:100%;
+  padding-left: 50px;
+}
+.watchlist-row {
+  border-width: 0px 0px 1px 0px;
+  border-color: #ABB2B9;
+  border-style: solid;
+
+}
+
+.watchlist-rows:nth-child(odd) {
+  background-color: #F2F3F4;
+}
+.bold {
+  font-weight: bold;
+}
+.x {
+  text-align: center;
+  font-size: 30px;
+  color: #E74C3C;
+
+}
 
 /*GZSIUVJPSSSR5WU5*/
