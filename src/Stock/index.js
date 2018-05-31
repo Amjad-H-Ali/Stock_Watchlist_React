@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Stock = ({stock, AAPL}) => {
+const Stock = ({stock, AAPL, addToWatchlist}) => {
 
 	let companyName, symbol, latestPrice, change, changePercent, marketCap;
 
@@ -18,7 +18,7 @@ const Stock = ({stock, AAPL}) => {
 	return(
 
 		<div className="app-body">
-          <div className="watchlist-btn-container"><button className="add-to-watchlist-btn">Watch<i className="fa fa-angle-right"></i></button></div>
+          <div className="watchlist-btn-container"><button onClick={addToWatchlist} className="add-to-watchlist-btn">Watch<i className="fa fa-angle-right"></i></button></div>
 
           <div className="stock-info">
             <div><span className="stock-title">{companyName}</span> <span className="stock-ticker">({symbol})</span></div>

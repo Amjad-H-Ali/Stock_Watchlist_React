@@ -3,22 +3,22 @@ import React from 'react';
 
 const Watchlist = ({watchedStocks}) => {
 
-	const stocks = watchedStocks.map(stock => {
+	const stocks = watchedStocks.map((stock, i) => {
 		const {symbol, companyName, latestPrice, iexBidPrice:bid, iexAskPrice:ask, change, changePercent, high, low, iexVolume:volume, latestTime} = stock;
 		return (
-			<div className='watchlist-row row'>
-              <div className='bold'>{symbol}</div>
-              <div>{companyName}</div>
-              <div>{latestPrice}</div>
-              <div>{bid}</div>
-              <div>{ask}</div>
-              <div className={change < 0 ? 'red' : 'green'}>{change} <span className='changePercent'>({changePercent})</span></div>
-              <div>{high}</div>
-              <div>{low}</div>
-              <div>{volume}</div>
-              <div>{latestTime}</div>
-              <div className='x'><i className='fa fa-close'></i></div>
-            </div>
+			<div className='watchlist-row row' key={i}>
+        <div className='bold'>{symbol}</div>
+        <div>{companyName}</div>
+        <div>{latestPrice}</div>
+        <div>{bid}</div>
+        <div>{ask}</div>
+        <div className={change < 0 ? 'red' : 'green'}>{change} <span className='changePercent'>({changePercent})</span></div>
+        <div>{high}</div>
+        <div>{low}</div>
+        <div>{volume}</div>
+        <div>{latestTime}</div>
+        <div className='x'><i className='fa fa-close'></i></div>
+      </div>
 
 		)
 	});

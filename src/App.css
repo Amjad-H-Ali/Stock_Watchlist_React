@@ -30,7 +30,7 @@
   color: #797D7F;
 }
 
-.watchlist-link {
+.left-nav-link {
   text-align:left;
   margin-left: 50px;
  
@@ -42,7 +42,7 @@
 
 }
 
-.sign-link {
+.right-nav-link {
   text-align: right;
   margin-right: 50px;
 }

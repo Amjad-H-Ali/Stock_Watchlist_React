@@ -157,32 +157,67 @@ class App extends Component {
 
   }
 
+  logout = async (e) => {
+    const logoutJSON = await fetch('http://localhost:9292/user/logout', {
+      method:'POST',
+      credentials:'include'
+    });
+
+    const {message} = await logoutJSON.json();
+
+    this.setState({logged:false});
+
+    console.log(message);
+  }
+
+  goHome = () => {
+
+    this.setState({watchlistShowing:false});
+  }
+
+  addToWatchlist = async () => {
+    let ticker;
+
+    const {stock, AAPL} = this.state;
+
+    if (stock['symbol']) {
+      ({symbol:ticker} = stock);
+    }
+    else {
+      ({symbol:ticker} = AAPL);
+    }
+
+    const addStockJSON = await fetch(`http://localhost:9292/stock/${ticker}`, {
+      method:'POST',
+      credentials:'include'
+    });
+
+    const {stock} = await addStockJSON;
+
+    console.log(stock);
+
+
+  }
+
 
   render() {
     
     return (
       <div className="App">
         
-      <FAANG_Header FAANG={this.state.FAANG}/>  
+        <FAANG_Header FAANG={this.state.FAANG}/>  
 
-      <header className="app-header">
-        <div onClick={this.getWatchedStocks} className="watchlist-link nav">Watchlist</div>
-        <div className="app-title">Foo Finance</div>
-        <div onClick={this.showModal} className="sign-link nav">Sign In</div>
-      </header>
+        <header className="app-header">
+          {this.state.watchlistShowing ? <div onClick={this.goHome} className="left-nav-link nav">Home</div> : <div onClick={this.getWatchedStocks} className="left-nav-link nav">Watchlist</div> }
+          <div className="app-title">Foo Finance</div>
+          {this.state.logged ? <div onClick={this.logout} className="right-nav-link nav">Log Out</div> : <div onClick={this.showModal} className="right-nav-link nav">Sign In</div> }
+        </header>
 
-      {this.state.watchlistShowing ? <Watchlist watchedStocks={this.state.watchedStocks} /> : 
-      <div> <Search getStock={this.getStock} /> <Stock stock={this.state.stock} AAPL={this.state.AAPL}/> </div>}
+        {(this.state.watchlistShowing && this.state.logged) ? <Watchlist watchedStocks={this.state.watchedStocks} /> : <div> <Search getStock={this.getStock} /> <Stock stock={this.state.stock} AAPL={this.state.AAPL} addToWatchlist={this.addToWatchlist}/> </div>}
 
+        {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp} /> : null}
 
-      
-        
-        
-          
-
-      {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp} /> : null}
-
-    </div>
+      </div>
     );
   }
 }
