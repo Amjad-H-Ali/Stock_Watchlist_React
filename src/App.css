@@ -402,8 +402,14 @@
 .x {
   text-align: center;
   font-size: 30px;
-  color: #E74C3C;
+  color: #d80000;
 
+}
+
+.x:hover {
+  font-size: 35px; 
+  color: #8c0000;
+  transition: 1s;
 }
 
 /*GZSIUVJPSSSR5WU5*/

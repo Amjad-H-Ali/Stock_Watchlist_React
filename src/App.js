@@ -204,6 +204,21 @@ class App extends Component {
 
   }
 
+  deleteStock = async (e) => {
+    const ticker = e.target.id;
+    
+    const deleteJSON = await fetch(`http://localhost:9292/stock/${ticker}`, {
+      method: 'DELETE',
+      credentials:'include'
+    })
+
+    const {state:{watchedStocks}} = this;
+
+    const newWatchedStocks = watchedStocks.filter(stock => stock.symbol !== ticker);
+
+    this.setState({watchedStocks:newWatchedStocks});
+  }
+
 
   render() {
     
@@ -218,7 +233,7 @@ class App extends Component {
           {this.state.logged ? <div onClick={this.logout} className="right-nav-link nav">Log Out</div> : <div onClick={this.showModal} className="right-nav-link nav">Sign In</div> }
         </header>
 
-        {(this.state.watchlistShowing && this.state.logged) ? <Watchlist watchedStocks={this.state.watchedStocks} /> : <div> <Search getStock={this.getStock} /> <Stock stock={this.state.stock} AAPL={this.state.AAPL} addToWatchlist={this.addToWatchlist}/> </div>}
+        {(this.state.watchlistShowing && this.state.logged) ? <Watchlist watchedStocks={this.state.watchedStocks} deleteStock={this.deleteStock} /> : <div> <Search getStock={this.getStock} /> <Stock stock={this.state.stock} AAPL={this.state.AAPL} addToWatchlist={this.addToWatchlist}/> </div>}
 
         {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp} /> : null}
 
