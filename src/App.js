@@ -165,9 +165,8 @@ class App extends Component {
 
     const {message} = await logoutJSON.json();
 
-    this.setState({logged:false});
+    this.setState({logged:false, watchlistShowing:false});
 
-    console.log(message);
   }
 
   goHome = () => {
@@ -176,25 +175,31 @@ class App extends Component {
   }
 
   addToWatchlist = async () => {
-    let ticker;
+    const {logged, } = this.state;
+    if (logged) {
+      let ticker;
 
-    const {stock, AAPL} = this.state;
+      const {stock, AAPL} = this.state;
 
-    if (stock['symbol']) {
-      ({symbol:ticker} = stock);
+      if (stock['symbol']) {
+        ({symbol:ticker} = stock);
+      }
+      else {
+        ({symbol:ticker} = AAPL);
+      }
+
+      const addStockJSON = await fetch(`http://localhost:9292/stock/${ticker}`, {
+        method:'POST',
+        credentials:'include'
+      });
+
+      const {added_stock} = await addStockJSON.json();
+
+      this.getWatchedStocksInfo(added_stock);
     }
     else {
-      ({symbol:ticker} = AAPL);
-    }
-
-    const addStockJSON = await fetch(`http://localhost:9292/stock/${ticker}`, {
-      method:'POST',
-      credentials:'include'
-    });
-
-    const {stock} = await addStockJSON;
-
-    console.log(stock);
+      this.setState({modal:true, message:'You Must Be Logged In First!'})
+    } 
 
 
   }
