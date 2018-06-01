@@ -245,7 +245,7 @@ class App extends Component {
 
         <header className="app-header">
           {this.state.watchlistShowing ? <div onClick={this.goHome} className="left-nav-link nav">Home</div> : <div onClick={this.getWatchedStocks} className="left-nav-link nav">Watchlist</div> }
-          <div className="app-title">Foo Finance</div>
+          <div className="app-title">FINVESTOR</div>
           {this.state.logged ? <div onClick={this.logout} className="right-nav-link nav">Log Out</div> : <div onClick={this.showModal} className="right-nav-link nav">Sign In</div> }
         </header>
         

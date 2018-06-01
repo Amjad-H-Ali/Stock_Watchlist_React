@@ -57,7 +57,7 @@ class Signin_Register extends Component{
 	            <div className="modal-body">
 	              <form className="sign-form" onSubmit={this.handleSubmit}>
 	                <div className="tabs"> <div onClick={this.setRegistering} className="sign-tab">Sign In</div> <div onClick={this.setRegistering} className="register-tab"> Register</div> </div>
-	                <div className="email-input-div"><div className="label">Email</div><input value={this.state.emailInput} onChange={this.handleEmailInput} className="email-input" type="text" placeholder="Enter Your Email"/></div>
+	                <div className="email-input-div"><div className="label">Email</div><input value={this.state.emailInput} onChange={this.handleEmailInput} className="email-input" type="email" placeholder="Enter Your Email"/></div>
 	                <div className="password-input-div"><div className="label">Password</div><input value={this.state.pswInput} onChange={this.handlePasswordInput} className="password-input" type="password" placeholder={this.state.registering ? "Create A Password":"Enter Your Password"}/></div>
 	                <div className="submit-btn-input-div"><button className="submit-btn">{this.state.registering ? 'Sign Up':'Sign In'}</button></div>
 	                {(this.props.message) ? <div className="message">{this.props.message}</div> : null}
