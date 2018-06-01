@@ -17,7 +17,8 @@ class App extends Component {
       logged: false,
       message: "",
       watchedStocks: [],
-      watchlistShowing:false
+      watchlistShowing:false,
+      
 
 
       
@@ -26,9 +27,12 @@ class App extends Component {
   componentDidMount () {
     this.getFAANG('FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG');
 
+    const {state:{logged}} = this;
+
     
   }
 
+  // convert decimal multiplier to percent
   percentify = (num) => {
 
     return (num*100).toFixed(2);
@@ -37,14 +41,17 @@ class App extends Component {
 
   getFAANG = async (...ticker) => {
     
-    const FAANGJSON = await fetch(`https://api.iextrading.com/1.0/stock/market/batch?symbols=${ticker}&types=quote`)
-  
+    // get stock info for the five default stocks
+    const FAANGJSON = await fetch(`https://api.iextrading.com/1.0/stock/market/batch?symbols=${ticker}&types=quote`) 
     const ObjFAANG = await FAANGJSON.json();
 
+    // loop over objfaang and .....
     for (let key in ObjFAANG) { 
 
+      // create variable FAANG that references FAANG in this.state
       const {state:{FAANG}} = this; 
 
+      // create variables companyName, symbol, etc for this stock in objFaang
       const {quote:{companyName, symbol, latestPrice, change, changePercent, marketCap}} = ObjFAANG[key];
 
       const percentified = this.percentify(changePercent);
@@ -94,9 +101,8 @@ class App extends Component {
 
     const { success, message } = await signInJSON.json();
 
-    
 
-    success ? this.setState({logged: true, modal:false}) : this.setState({message: message});
+    success ?  this.setState({logged: true, modal:false}): this.setState({message: message});
 
   }
 
@@ -114,7 +120,7 @@ class App extends Component {
   }
 
   getWatchedStocks = async () => {
-
+   
     const {state:{logged}} = this;
   
     if (logged) {
@@ -124,9 +130,7 @@ class App extends Component {
       
       const {stocks} = await stocksJSON.json();
 
-    
-
-      this.getWatchedStocksInfo(stocks);
+      stocks.length > 0 ? this.getWatchedStocksInfo(stocks) : this.setState({watchlistShowing:true});
     }
     else {
       this.setState({modal: true, message:'You Must Be Logged In First!'});
@@ -135,25 +139,31 @@ class App extends Component {
   }
 
   getWatchedStocksInfo = async (ticker) => {
+
+    
     const stockInfoJSON = await fetch(`https://api.iextrading.com/1.0/stock/market/batch?symbols=${ticker}&types=quote`);
 
     const objOfStocks = await stockInfoJSON.json();
 
-   
 
     for(let key in objOfStocks) {
 
-      const{watchedStocks, watchlistShowing} = this.state;
+      const {watchedStocks, watchlistShowing} = this.state;
 
-      const {quote:{symbol, companyName, latestPrice, iexBidPrice, iexAskPrice, change, changePercent, high, low, iexVolume, latestTime}} = objOfStocks[key];
+      const { quote: {symbol, companyName, latestPrice, iexBidPrice, iexAskPrice, change, changePercent, high, low, iexVolume, latestTime}} = objOfStocks[key];
 
       const percentified = this.percentify(changePercent);
 
       const stock = {symbol, companyName, latestPrice, iexBidPrice, iexAskPrice, change, changePercent:percentified, high, low, iexVolume, latestTime}
 
-      this.setState({watchedStocks:[...watchedStocks, stock], watchlistShowing: true });
+      // watchedStocks.push(stock);
+
+      this.setState({watchedStocks:[...watchedStocks, stock],  watchlistShowing: true });
+      
 
     }
+
+    // this.setState({watchlistShowing: true });
 
   }
 
@@ -164,7 +174,7 @@ class App extends Component {
     });
 
     const {message} = await logoutJSON.json();
-
+    
     this.setState({logged:false, watchlistShowing:false});
 
   }
@@ -175,15 +185,18 @@ class App extends Component {
   }
 
   addToWatchlist = async () => {
-    const {logged, } = this.state;
+
+    const {logged} = this.state;
     if (logged) {
       let ticker;
 
       const {stock, AAPL} = this.state;
 
+      // if we just did a search
       if (stock['symbol']) {
         ({symbol:ticker} = stock);
       }
+      // this.state.stock is still an empty object so use apple by default
       else {
         ({symbol:ticker} = AAPL);
       }
@@ -219,6 +232,9 @@ class App extends Component {
     this.setState({watchedStocks:newWatchedStocks});
   }
 
+    
+ 
+
 
   render() {
     
@@ -232,10 +248,13 @@ class App extends Component {
           <div className="app-title">Foo Finance</div>
           {this.state.logged ? <div onClick={this.logout} className="right-nav-link nav">Log Out</div> : <div onClick={this.showModal} className="right-nav-link nav">Sign In</div> }
         </header>
+        
+  
+            
 
         {(this.state.watchlistShowing && this.state.logged) ? <Watchlist watchedStocks={this.state.watchedStocks} deleteStock={this.deleteStock} /> : <div> <Search getStock={this.getStock} /> <Stock stock={this.state.stock} AAPL={this.state.AAPL} addToWatchlist={this.addToWatchlist}/> </div>}
 
-        {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp} /> : null}
+        {this.state.modal ? <Signin_Register showModal={this.showModal} signIn={this.signIn} signUp={this.signUp} message={this.state.message} /> : null}
 
       </div>
     );
@@ -250,9 +269,7 @@ export default App;
 
 
 
-/*<div className="body-header">
-   Welcome John
-  </div>
+/*
 
 
 
