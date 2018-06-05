@@ -91,7 +91,7 @@ class App extends Component {
 
   signIn = async (email, password) => {
 
-    const signInJSON = await fetch('http://localhost:9292/user/login', {
+    const signInJSON = await fetch('https://peaceful-chamber-98522.herokuapp.com/user/login', {
       method:'POST',
       credentials: 'include',
       body: JSON.stringify({email: email, password: password})
@@ -105,7 +105,7 @@ class App extends Component {
   }
 
   signUp = async (email, password) => {
-    const signUpJSON = await fetch('http://localhost:9292/user/register', {
+    const signUpJSON = await fetch('https://peaceful-chamber-98522.herokuapp.com/user/register', {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify({email: email, password: password})
@@ -120,7 +120,7 @@ class App extends Component {
   getWatchedTickers = async () => {
 
   
-    const stocksJSON = await fetch('http://localhost:9292/stock', {
+    const stocksJSON = await fetch('https://peaceful-chamber-98522.herokuapp.com/stock', {
       credentials: 'include'
     });
     
@@ -175,7 +175,7 @@ class App extends Component {
 
 
   logout = async (e) => {
-    const logoutJSON = await fetch('http://localhost:9292/user/logout', {
+    const logoutJSON = await fetch('https://peaceful-chamber-98522.herokuapp.com/user/logout', {
       method:'POST',
       credentials:'include'
     });
@@ -208,7 +208,7 @@ class App extends Component {
         ({symbol:ticker} = AAPL);
       }
 
-      const addStockJSON = await fetch(`http://localhost:9292/stock/${ticker}`, {
+      const addStockJSON = await fetch(`https://peaceful-chamber-98522.herokuapp.com/stock/${ticker}`, {
         method:'POST',
         credentials:'include'
       });
@@ -229,7 +229,7 @@ class App extends Component {
   deleteStock = async (e) => {
     const ticker = e.target.id;
     
-    const deleteJSON = await fetch(`http://localhost:9292/stock/${ticker}`, {
+    const deleteJSON = await fetch(`https://peaceful-chamber-98522.herokuapp.com/stock/${ticker}`, {
       method: 'DELETE',
       credentials:'include'
     })
