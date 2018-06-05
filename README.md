@@ -19,7 +19,7 @@ A Real Time Stock Watchlist for Investors.
   
   * ReactJS, Javascript, HTML, CSS.
   * IEX Group Inc API.
-  * [Stock Watchlist API Developed By Me.](https://github.com/Amjad-H-Ali/Stock_Watchlist_API)
+  * [FINVESTOR API Developed By Me.](https://github.com/Amjad-H-Ali/Stock_Watchlist_API)
   
 ## API Info
 
