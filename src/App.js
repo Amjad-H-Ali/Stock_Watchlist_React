@@ -237,11 +237,13 @@ class App extends Component {
       credentials:'include'
     })
 
-    const {state:{watchedStocks}} = this;
+    const {state:{watchedTickers, watchedStocks}} = this;
 
     const newWatchedStocks = watchedStocks.filter(stock => stock.symbol !== ticker);
 
-    this.setState({watchedStocks:newWatchedStocks});
+    const newWatchedTickers = watchedTickers.filter(aTicker => aTicker !== ticker);
+
+    this.setState({watchedTickers:newWatchedTickers, watchedStocks:newWatchedStocks});
   }
 
     
