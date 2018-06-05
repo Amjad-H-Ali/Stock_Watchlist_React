@@ -1,5 +1,5 @@
 # FINVESTOR
-
+#### By Amjad Ali
 A Real Time Stock Watchlist for Investors.
 
 ## Instructions
