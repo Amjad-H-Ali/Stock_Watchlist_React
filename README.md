@@ -11,6 +11,7 @@ A Real Time Stock Watchlist for Investors.
   * A Modal will popup with tabs to _Sign In_ or _Register_.
   * Once logged in, click the _Watch_ button to watch the stock.
   * You'll be redirected to your Watchlist where your real time quotes are shown.
+  * If you wish to delete a stock from your watchlist, click the corresponding red _X_ on the far right of the stock.
   * Click _Home_ on the top left corner to go back to the main page.
   * Or click _Log out_ on the top left corner from anywhere in the app.
 
