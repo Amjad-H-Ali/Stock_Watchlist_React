@@ -28,8 +28,6 @@ class App extends Component {
     this.getFAANG('FB', 'AMZN', 'AAPL', 'NFLX', 'GOOG');
 
     const {state:{logged}} = this;
-
-    
   }
 
   // convert decimal multiplier to percent
@@ -64,7 +62,6 @@ class App extends Component {
 
       this.setState({FAANG:[...FAANG, stock]});
     }
-    
     
   }
 
@@ -156,14 +153,9 @@ class App extends Component {
 
       const stock = {symbol, companyName, latestPrice, iexBidPrice, iexAskPrice, change, changePercent:percentified, high, low, iexVolume, latestTime}
 
-      // watchedStocks.push(stock);
-
       this.setState({watchedStocks:[...watchedStocks, stock],  watchlistShowing: true });
-      
-
+    
     }
-
-    // this.setState({watchlistShowing: true });
 
   }
 
