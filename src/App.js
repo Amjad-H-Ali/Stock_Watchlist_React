@@ -16,6 +16,7 @@ class App extends Component {
       modal: false,
       logged: false,
       message: "",
+      watchedTickers:[],
       watchedStocks: [],
       watchlistShowing:false,
       
@@ -99,7 +100,7 @@ class App extends Component {
     const { success, message } = await signInJSON.json();
 
 
-    success ?  this.setState({logged: true, modal:false}): this.setState({message: message});
+    success ?  (this.setState({logged: true, modal:false}), this.getWatchedTickers()) : this.setState({message: message});
 
   }
 
@@ -112,52 +113,71 @@ class App extends Component {
 
     const { success, message } = await signUpJSON.json();
 
-    success ? this.setState({logged: true, modal: false}) : this.setState({message: message});
+    success ? (this.setState({logged: true, modal: false}), this.getWatchedTickers()): this.setState({message: message});
 
   }
 
-  getWatchedStocks = async () => {
-   
-    const {state:{logged}} = this;
-  
-    if (logged) {
-      const stocksJSON = await fetch('http://localhost:9292/stock', {
-        credentials: 'include'
-      });
-      
-      const {stocks} = await stocksJSON.json();
+  getWatchedTickers = async () => {
 
-      stocks.length > 0 ? this.getWatchedStocksInfo(stocks) : this.setState({watchlistShowing:true});
+  
+    const stocksJSON = await fetch('http://localhost:9292/stock', {
+      credentials: 'include'
+    });
+    
+    const {stocks} = await stocksJSON.json();
+
+    this.setState({watchedTickers:stocks});
+   
+    
+  }
+
+  getWatchedStocksInfo = async () => {
+
+    const {state:{watchedTickers:tickers, watchedStocks, watchlistShowing, logged}} = this;
+
+    if (tickers.length > 0 && logged) {
+      const stockInfoJSON = await fetch(`https://api.iextrading.com/1.0/stock/market/batch?symbols=${tickers}&types=quote`);
+
+      const objOfStocks = await stockInfoJSON.json();
+
+      this.addWatchedStockInfo(objOfStocks);
+    }
+    else if (logged) {
+      this.setState({watchlistShowing:true});
     }
     else {
       this.setState({modal: true, message:'You Must Be Logged In First!'});
+
     }
-    
+
   }
 
-  getWatchedStocksInfo = async (ticker) => {
+  addWatchedStockInfo = (obj) => {
 
-    
-    const stockInfoJSON = await fetch(`https://api.iextrading.com/1.0/stock/market/batch?symbols=${ticker}&types=quote`);
+    const {state:{watchlistShowing}} = this;
 
-    const objOfStocks = await stockInfoJSON.json();
+    for(let key in obj) {
 
+      const {state:{watchedStocks}} = this;
 
-    for(let key in objOfStocks) {
-
-      const {watchedStocks, watchlistShowing} = this.state;
-
-      const { quote: {symbol, companyName, latestPrice, iexBidPrice, iexAskPrice, change, changePercent, high, low, iexVolume, latestTime}} = objOfStocks[key];
+      const { quote: {symbol, companyName, latestPrice, iexBidPrice, iexAskPrice, change, changePercent, high, low, iexVolume, latestTime}} = obj[key];
 
       const percentified = this.percentify(changePercent);
 
       const stock = {symbol, companyName, latestPrice, iexBidPrice, iexAskPrice, change, changePercent:percentified, high, low, iexVolume, latestTime}
 
-      this.setState({watchedStocks:[...watchedStocks, stock],  watchlistShowing: true });
-    
+      // if (watchedStocks.findIndex(aStock => aStock.symbol === stock.symbol) === -1) {
+        
+        this.setState({watchedStocks:[...watchedStocks, stock]});
+      // }
+      // else {
+      //   this.setState({watchlistShowing:true});
+      // },  
     }
 
+    this.setState({watchlistShowing:true});
   }
+
 
   logout = async (e) => {
     const logoutJSON = await fetch('http://localhost:9292/user/logout', {
@@ -167,13 +187,13 @@ class App extends Component {
 
     const {message} = await logoutJSON.json();
     
-    this.setState({logged:false, watchlistShowing:false});
+    this.setState({logged:false, watchlistShowing:false, watchedStocks:[], watchedTickers:[]});
 
   }
 
   goHome = () => {
 
-    this.setState({watchlistShowing:false});
+    this.setState({watchlistShowing:false, watchedStocks:[]});
   }
 
   addToWatchlist = async () => {
@@ -236,7 +256,7 @@ class App extends Component {
         <FAANG_Header FAANG={this.state.FAANG}/>  
 
         <header className="app-header">
-          {this.state.watchlistShowing ? <div onClick={this.goHome} className="left-nav-link nav">Home</div> : <div onClick={this.getWatchedStocks} className="left-nav-link nav">Watchlist</div> }
+          {this.state.watchlistShowing ? <div onClick={this.goHome} className="left-nav-link nav">Home</div> : <div onClick={this.getWatchedStocksInfo} className="left-nav-link nav">Watchlist</div> }
           <div className="app-title">FINVESTOR</div>
           {this.state.logged ? <div onClick={this.logout} className="right-nav-link nav">Log Out</div> : <div onClick={this.showModal} className="right-nav-link nav">Sign In</div> }
         </header>
