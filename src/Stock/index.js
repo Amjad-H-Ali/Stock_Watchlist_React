@@ -22,7 +22,7 @@ const Stock = ({stock, AAPL, addToWatchlist}) => {
 
           <div className="stock-info">
             <div><span className="stock-title">{companyName}</span> <span className="stock-ticker">({symbol})</span></div>
-            <div><span className="stock-price">{latestPrice}</span> <span className={change < 0 ? "stock-percentage red" : "stock-percentage green" }>{change}<span className="changePercent">({changePercent})</span></span></div>
+            <div><span className="stock-price">{latestPrice}</span> <span className={change < 0 ? "stock-percentage red" : "stock-percentage green" }>{change}<span className="changePercent">({changePercent}%)</span></span></div>
             <div><div className="market-cap-title">Market Cap</div> <div className="stock-market-cap">{marketCap}</div></div>
           </div>
 
