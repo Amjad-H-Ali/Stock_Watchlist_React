@@ -1,6 +1,6 @@
 # FINVESTOR
 #### By Amjad Ali
-A Real Time Stock Watchlist for Investors.
+A Real Time Stock Watchlist for Investors. Users can search stocks using their ticker symbols, view real time quotes, and add stocks to their watchlist.  
 
 ## Instructions
 
